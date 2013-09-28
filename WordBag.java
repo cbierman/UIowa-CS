@@ -6,7 +6,8 @@ package wordbag;
 
 /**
  *
- * @author cbierman
+ * @author Cale Bierman
+ * @hawkid cbierman
  */
 
 import java.util.Random;
@@ -28,6 +29,8 @@ public class WordBag {
        numWords = 0;
     }
     
+    //Increases the frequency of the provided word and keeps myArray in decreasing
+    //order
     public void addOccurance(String word) {
         int currFreq;
         int index = getIndexOf(word);
@@ -39,17 +42,25 @@ public class WordBag {
             numWords++;
         }
         else {
+            //Otherwise, we get the current freqency and add one to it
             currFreq = myArray[index].getFrequency();
             currFreq = currFreq + 1;
+            
+            //safe will be used as a handle for the word we're adding an occurance to
             MyWord safe = myArray[index];
             safe.setFrequency(currFreq);
-            
+            //if the index is 0, the word is already the most frequent word
+            //so we just increase it's frequency 
             if (index == 0) {
-                myArray[index] = safe;
+                myArray[index].setFrequency(currFreq);
             }
-            
+            //otherwise, if increasing the frequency puts myArray out of order,
+            //we need to find where it needs to go and put it there
             else if (currFreq > myArray[index -1].getFrequency()) {
+                //Use binary search to find the index of where the word needs to go
                 int place = binarySearch(myArray, 0, index, currFreq);
+                //However, if the new frequency is not in myArray, we have to 
+                //linearly search for where it needs to go
                 if (place == -1){
                     for (int i = 0; i< numWords;i++) {
                         if (myArray[i].getFrequency() < currFreq) {
@@ -59,14 +70,17 @@ public class WordBag {
                     }
                     
                 }
-               
+                //We then shift the rest of the list items over by 1 space
+                //to make room.
                 for (int j = index; j>place; j--) {
                     myArray[j] = myArray[j-1];
                 }
-                
+                //and insert the new frequency into it's correct position
                 myArray[place]=safe;
-                //System.out.println(myArray[place].getWord() + " went from " + index + " to " + place);
+                
             }
+            //This fires off when increasing the frequency doesn't affect the
+            //order.
             else {
                 myArray[index].setFrequency(currFreq);
             }
@@ -122,7 +136,7 @@ public class WordBag {
         
         return index;
     }
-    
+    //Uses recursion to find the index of x within the Array A.
     public static int binarySearch(MyWord [] A, int start, int end, int x) {
         
         int mid = (start + end)/2;
@@ -157,52 +171,7 @@ public class WordBag {
     public static void main(String[] args) {
         // TODO code application logic here
         WordBag bg = new WordBag();
-        String [] words = new String [5];
-        words[0] = "tim";
-        words[1] = "steve";
-        words[2] = "paul";
-        words[3] = "austin";
-        words[4] = "jim";
-        
-       for(int i = 0; i <= 10; i++) {
-          Random r = new Random();
-           int x = r.nextInt(4);
-           bg.addOccurance(words[x]);
-       }
-     
-        //bg.removeOccurance("jim");
-//         bg.addOccurance("tim");
-//         bg.addOccurance("steve");
-//         bg.addOccurance("austin");
-//         bg.addOccurance("austin");
-//         bg.addOccurance("jim");
-//         bg.addOccurance("tim");
-//         bg.addOccurance("tim");
-//         bg.addOccurance("austin");
-//         bg.addOccurance("steve");
-//         bg.addOccurance("steve");
-//         bg.addOccurance("steve");
-//         bg.addOccurance("jim");
-//         bg.addOccurance("jim");
-//         bg.addOccurance("jim");
-//         bg.addOccurance("tim");
-//         bg.addOccurance("steve");
-//         bg.addOccurance("jim");
-//         bg.addOccurance("steve");
-//         bg.addOccurance("austin");
-//         bg.addOccurance("austin");
-//         bg.addOccurance("steve");
-//         bg.addOccurance("tim");
-//         bg.addOccurance("steve");
-//         bg.addOccurance("jim");
-//         bg.addOccurance("tim");
-//         bg.addOccurance("steve");
-//         bg.addOccurance("austin");
-//         bg.addOccurance("austin");
-//         bg.addOccurance("austin");
-//         bg.addOccurance("austin");
-//         bg.addOccurance("austin");
-//         bg.addOccurance("jim");
+
          
          
          for(int y = 0; y < bg.numWords; y++){
