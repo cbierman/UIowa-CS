@@ -31,6 +31,9 @@ public class WordBag {
     public void addOccurance(String word) {
         int currFreq;
         int index = getIndexOf(word);
+        //System.out.println(index + " <<<<<<<<");
+        
+        //If the index == numWords, then we have a new word to go inside the list
         if (index == numWords) {
             myArray[index] = new MyWord(word);
             numWords++;
@@ -40,21 +43,35 @@ public class WordBag {
             currFreq = currFreq + 1;
             MyWord safe = myArray[index];
             safe.setFrequency(currFreq);
-            if(index != 0) {
-                if (safe.getFrequency() > myArray[index-1].getFrequency()) {
-                
-                    int place = binarySearch(myArray, 0, index, safe.getFrequency());
-                    System.out.println(place + "******");
-                    myArray[index] = null;
-                    for (int i = index; i>place; i--) {
-                        myArray[i] = myArray[i-1];
+            
+            if (index == 0) {
+                myArray[index] = safe;
+            }
+            
+            else if (currFreq > myArray[index -1].getFrequency()) {
+                int place = binarySearch(myArray, 0, index, currFreq);
+                if (place == -1){
+                    for (int i = 0; i< numWords;i++) {
+                        if (myArray[i].getFrequency() < currFreq) {
+                            place = i;
+                            break;
+                        }
                     }
                     
-                    myArray[place] = safe;
                 }
+               
+                for (int j = index; j>place; j--) {
+                    myArray[j] = myArray[j-1];
+                }
+                
+                myArray[place]=safe;
+                //System.out.println(myArray[place].getWord() + " went from " + index + " to " + place);
+            }
+            else {
+                myArray[index].setFrequency(currFreq);
             }
         }
-     }
+    }
     
     public void removeOccurance(String word) {
         
@@ -77,15 +94,7 @@ public class WordBag {
     }
     
     public String mostFrequent(){
-        
-        MyWord mF = myArray[0];
-        
-        for (int i = 1; i < numWords; i ++) {
-            if (myArray[i].getFrequency() > mF.getFrequency())
-                mF = myArray[i];
-        }
-        
-        return mF.getWord();
+        return myArray[0].getWord();
         
     }
     
@@ -119,7 +128,7 @@ public class WordBag {
         int mid = (start + end)/2;
         
         if (start > end) { 
-            return 0;
+            return -1;
         }
         
         if (A[mid].getFrequency() == x) {
@@ -148,60 +157,60 @@ public class WordBag {
     public static void main(String[] args) {
         // TODO code application logic here
         WordBag bg = new WordBag();
-//        String [] words = new String [5];
-//        words[0] = "tim";
-//        words[1] = "steve";
-//        words[2] = "paul";
-//        words[3] = "austin";
-//        words[4] = "jim";
-//        
-//       for(int i = 0; i <= 10; i++) {
-//          Random r = new Random();
-//           int x = r.nextInt(4);
-//           bg.addOccurance(words[x]);
-//       }
+        String [] words = new String [5];
+        words[0] = "tim";
+        words[1] = "steve";
+        words[2] = "paul";
+        words[3] = "austin";
+        words[4] = "jim";
+        
+       for(int i = 0; i <= 10; i++) {
+          Random r = new Random();
+           int x = r.nextInt(4);
+           bg.addOccurance(words[x]);
+       }
      
         //bg.removeOccurance("jim");
-         bg.addOccurance("tim");
-         bg.addOccurance("steve");
-         bg.addOccurance("austin");
-         bg.addOccurance("austin");
-         bg.addOccurance("jim");
-         bg.addOccurance("tim");
-         bg.addOccurance("tim");
-         bg.addOccurance("austin");
-         bg.addOccurance("steve");
-         bg.addOccurance("steve");
-         bg.addOccurance("steve");
-         bg.addOccurance("jim");
-         bg.addOccurance("jim");
-         bg.addOccurance("jim");
-         bg.addOccurance("tim");
-         bg.addOccurance("steve");
-         bg.addOccurance("jim");
-         bg.addOccurance("steve");
-         bg.addOccurance("austin");
-         bg.addOccurance("austin");
-         bg.addOccurance("steve");
-         bg.addOccurance("tim");
-         bg.addOccurance("steve");
-         bg.addOccurance("jim");
-         bg.addOccurance("tim");
-         bg.addOccurance("steve");
-         bg.addOccurance("austin");
-         bg.addOccurance("austin");
-         bg.addOccurance("austin");
-         bg.addOccurance("austin");
-         bg.addOccurance("austin");
-         bg.addOccurance("jim");
+//         bg.addOccurance("tim");
+//         bg.addOccurance("steve");
+//         bg.addOccurance("austin");
+//         bg.addOccurance("austin");
+//         bg.addOccurance("jim");
+//         bg.addOccurance("tim");
+//         bg.addOccurance("tim");
+//         bg.addOccurance("austin");
+//         bg.addOccurance("steve");
+//         bg.addOccurance("steve");
+//         bg.addOccurance("steve");
+//         bg.addOccurance("jim");
+//         bg.addOccurance("jim");
+//         bg.addOccurance("jim");
+//         bg.addOccurance("tim");
+//         bg.addOccurance("steve");
+//         bg.addOccurance("jim");
+//         bg.addOccurance("steve");
+//         bg.addOccurance("austin");
+//         bg.addOccurance("austin");
+//         bg.addOccurance("steve");
+//         bg.addOccurance("tim");
+//         bg.addOccurance("steve");
+//         bg.addOccurance("jim");
+//         bg.addOccurance("tim");
+//         bg.addOccurance("steve");
+//         bg.addOccurance("austin");
+//         bg.addOccurance("austin");
+//         bg.addOccurance("austin");
+//         bg.addOccurance("austin");
+//         bg.addOccurance("austin");
+//         bg.addOccurance("jim");
          
          
-         for(int y = 0; y <bg.numWords; y++){
+         for(int y = 0; y < bg.numWords; y++){
             System.out.print(bg.myArray[y].getWord() + " ");
             System.out.println(bg.myArray[y].getFrequency());
-        }
+            //System.out.println(bg.myArray[y]);
+       }
         
-         bg = null;
         
         //System.out.println(binarySearch(bg.myArray, 0, (bg.numWords)-1 , 2));
         
